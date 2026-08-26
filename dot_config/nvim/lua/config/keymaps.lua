@@ -6,8 +6,8 @@
 vim.keymap.set("i", "jk", "<Esc>")
 
 -- Windows Keys :)
-vim.keymap.set({ "n", "i", "v" }, "<C-s>", "<Esc>:w<CR>", { silent = true })
-vim.keymap.set({ "n", "i", "v" }, "<C-q>", "<Esc>:q<CR>", { silent = true })
-vim.keymap.set({ "n", "i", "v" }, "<C-z>", "<Esc>u", { silent = true })
-vim.keymap.set("v", "<C-c>", '"+y', { silent = true })
-vim.keymap.set({ "n", "i" }, "<C-v>", '"+p', { silent = true })
+-- vim.keymap.set({ "n", "i", "v" }, "<C-s>", "<Esc>:w<CR>", { silent = true })
+-- vim.keymap.set({ "n", "i", "v" }, "<C-q>", "<Esc>:q<CR>", { silent = true })
+-- vim.keymap.set({ "n", "i", "v" }, "<C-z>", "<Esc>u", { silent = true })
+-- vim.keymap.set("v", "<C-c>", '"+y', { silent = true })
+-- vim.keymap.set({ "n", "i" }, "<C-v>", '"+p', { silent = true })
