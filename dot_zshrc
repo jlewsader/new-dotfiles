@@ -19,9 +19,23 @@ export PATH="$PATH:$HOME/.local/share/gem/ruby/$(ruby -e 'puts RUBY_VERSION.spli
 #  fi
 #fi
 
-if [[ -n "$SSH_CONNECTION" ]] && [[ -z "$TMUX" ]]; then
-  tmux attach -t main || tmux new -s main
-fi 
+# if [[ -n "$SSH_CONNECTION" ]] && [[ -z "$TMUX" ]]; then
+  # tmux attach -t main || tmux new -s main
+# fi 
+
+# Always attach or start a tmux session for interactive SSH logins
+if [[ -n "$SSH_CONNECTION" && -z "$TMUX" && $- == *i* ]]; then
+  if tmux has-session -t main 2>/dev/null; then
+    tmux attach-session -t main
+  else
+    tmux new-session -s main
+  fi
+  
+  # Exit SSH only if tmux exited cleanly (status 0)
+  if [[ $? -eq 0 ]]; then
+    exit
+  fi
+fi
 
 # ------------------------------
 # History
