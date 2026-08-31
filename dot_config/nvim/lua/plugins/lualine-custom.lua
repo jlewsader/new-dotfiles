@@ -1,7 +1,6 @@
 return {
   "nvim-lualine/lualine.nvim",
   opts = function(_, opts)
-    -- Customzie my options.
     opts.options = {
       icons_enabled = true,
       theme = "auto",
@@ -29,6 +28,7 @@ return {
     }
 
     -- Set desired sections.
+    -- Add this directly before setting opts.sections
     opts.sections = {
       lualine_a = { "mode" },
       lualine_b = { "branch", "diff", "diagnostics" },
