@@ -386,6 +386,15 @@ hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true 
 -- Power button bind to guarantee suspend
 -- hl.bind("XF86PowerOff", hl.dsp.exec_cmd("systemctl suspend"))
 
+-- Lid Closed: disable internal screen
+hl.bind("switch:on:Lid Switch", function()
+	hl.monitor({ output = "eDP-1", disabled = true })
+end, { locked = true })
+-- Lid Opened: re-enable internal screen
+hl.bind("switch:off:Lid Switch", function()
+	hl.monitor({ output = "eDP-1", disabled = false })
+end, { locked = true })
+
 --------------------------------
 ---- WINDOWS AND WORKSPACES ----
 --------------------------------
