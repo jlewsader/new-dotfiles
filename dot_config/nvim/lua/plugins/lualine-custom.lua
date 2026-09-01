@@ -1,9 +1,47 @@
 return {
   "nvim-lualine/lualine.nvim",
   opts = function(_, opts)
+    -- Fetch raw Catppuccin Mocha color palette
+    local palette = require("catppuccin.palettes").get_palette("mocha")
+
+    -- Define explicit background and text colors for status bar sections
+    local custom_catppuccin = {
+      normal = {
+        a = { bg = palette.blue, fg = palette.mantle, gui = "bold" },
+        b = { bg = palette.surface0, fg = palette.text },
+        c = { bg = palette.mantle, fg = palette.subtext1 },
+      },
+      insert = {
+        a = { bg = palette.green, fg = palette.mantle, gui = "bold" },
+        b = { bg = palette.surface0, fg = palette.text },
+        c = { bg = palette.mantle, fg = palette.subtext1 },
+      },
+      visual = {
+        a = { bg = palette.mauve, fg = palette.mantle, gui = "bold" },
+        b = { bg = palette.surface0, fg = palette.text },
+        c = { bg = palette.mantle, fg = palette.subtext1 },
+      },
+      replace = {
+        a = { bg = palette.red, fg = palette.mantle, gui = "bold" },
+        b = { bg = palette.surface0, fg = palette.text },
+        c = { bg = palette.mantle, fg = palette.subtext1 },
+      },
+      command = {
+        a = { bg = palette.peach, fg = palette.mantle, gui = "bold" },
+        b = { bg = palette.surface0, fg = palette.text },
+        c = { bg = palette.mantle, fg = palette.subtext1 },
+      },
+      inactive = {
+        a = { bg = palette.crust, fg = palette.overlay0 },
+        b = { bg = palette.crust, fg = palette.overlay0 },
+        c = { bg = palette.crust, fg = palette.overlay0 },
+      },
+    }
+
+    -- Custom options
     opts.options = {
       icons_enabled = true,
-      theme = "auto",
+      theme = custom_catppuccin,
       component_separators = { left = "", right = "" },
       section_separators = { left = "", right = "" },
       disabled_filetypes = {
