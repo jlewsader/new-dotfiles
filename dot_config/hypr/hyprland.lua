@@ -33,8 +33,8 @@ hl.monitor({
 -- Set programs that you use
 local terminal = "kitty"
 local fileManager = terminal .. " -e yazi"
-local launcher = "rofi -show drun --show-icons"
-local runner = "rofi -show run"
+local launcher = "wofi --show drun"
+local runner = "wofi --show run"
 local browser = "firefox"
 local editor = terminal .. " -e nvim"
 
