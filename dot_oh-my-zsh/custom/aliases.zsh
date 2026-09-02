@@ -2,12 +2,17 @@
 alias zshconfig="nvim ~/.zshrc"
 alias ohmyzsh="nvim ~/.oh-my-zsh"
 alias aliases="nvim ~/.oh-my-zsh/custom/aliases.zsh"
+alias cd='z' #Zoxide cd overide
 alias cl='clear'
 alias cc='clear && cd ~'
 alias q='exit'
 alias reload='source ~/.zshrc'
 alias update='sudo apt update'
 alias upgrade='sudo apt upgrade -y'
+alias install='sudo apt install'
+
+# Bat instead of Cat
+alias cat='batcat'
 
 # Nvim
 alias vim="nvim"

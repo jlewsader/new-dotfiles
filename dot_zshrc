@@ -1,4 +1,5 @@
 export PATH="$HOME/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 path+=( $(ruby -e 'puts File.join(Gem.user_dir, "bin")') )
 # export PATH="$PATH:$HOME/.local/share/gem/ruby/$(ruby -e 'puts RUBY_VERSION.split(".").take(2).join(".")')/bin"
@@ -8,23 +9,6 @@ path+=( $(ruby -e 'puts File.join(Gem.user_dir, "bin")') )
 # ------------------------------
 # Auto-start tmux (SSH only)
 # ------------------------------
-# Start tmux only for interactive shells
-# AND only when not inside an X session
-#if [[ -o interactive ]] && [[ -z "$TMUX" ]] && [[ -z "$DISPLAY" ]]; then
-#  SESSION_NAME="main"
-#
-#  if tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
-#    exec tmux attach -t "$SESSION_NAME"
-#  else
-#    exec tmux new -s "$SESSION_NAME"
-#  fi
-#fi
-
-# if [[ -n "$SSH_CONNECTION" ]] && [[ -z "$TMUX" ]]; then
-  # tmux attach -t main || tmux new -s main
-# fi 
-
-# Always attach or start a tmux session for interactive SSH logins
 if [[ -n "$SSH_CONNECTION" && -z "$TMUX" && $- == *i* ]]; then
   if tmux has-session -t main 2>/dev/null; then
     tmux attach-session -t main
@@ -174,3 +158,60 @@ source $ZSH/oh-my-zsh.sh
 
 # opencode
 export PATH=/home/jlewsader/.opencode/bin:$PATH
+
+# ---- FZF -----
+# Set up fzf key bindings and fuzzy completion
+eval "$(fzf --zsh)"
+
+# -- Use fd instead of fzf --
+
+export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git"
+export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
+  --color=fg:#cdd6f4,fg+:#cdd6f4,bg:#1e1e2e,bg+:#45475a
+  --color=hl:#74c7ec,hl+:#89dceb,info:#f2cdcd,marker:#a6e3a1
+  --color=prompt:#f38ba8,spinner:#cba6f7,pointer:#fab387,header:#f5e0dc
+  --color=gutter:#1e1e2e,border:#11111b,label:#a6adc8,query:#cdd6f4
+  --border="rounded" --border-label="" --preview-window="border-block" --prompt="> "
+  --marker=">" --pointer="◆" --separator="─" --scrollbar="│"
+  --info="right"'
+
+show_file_or_dir_preview="if [ -d {} ]; then colorls --color=always --report --almost-all {} | head -200; else batcat -n --color=always --line-range :500 {}; fi"
+
+export FZF_CTRL_T_OPTS="--preview '$show_file_or_dir_preview'"
+export FZF_ALT_C_OPTS="--preview 'colorls --color=always --report --almost-all {} | head -200'"
+
+# Advanced customization of fzf options via _fzf_comprun function
+# - The first argument to the function is the name of the command.
+# - You should make sure to pass the rest of the arguments to fzf.
+_fzf_comprun() {
+  local command=$1
+  shift
+
+  case "$command" in
+    cd)           fzf --preview 'colorls --color=always --report --almost-all {} | head -200' "$@" ;;
+    export|unset) fzf --preview "eval 'echo \${}'"          "$@" ;;
+    ssh)          fzf --preview 'dig {}'                   "$@" ;;
+    *)            fzf --preview "$show_file_or_dir_preview" "$@" ;;
+  esac
+}
+
+# Use fd (https://github.com/sharkdp/fd) for listing path candidates.
+# - The first argument to the function ($1) is the base path to start traversal
+# - See the source code (completion.{bash,zsh}) for the details.
+_fzf_compgen_path() {
+  fd --hidden --exclude .git . "$1"
+}
+
+# Use fd to generate the list for directory completion
+_fzf_compgen_dir() {
+  fd --type=d --hidden --exclude .git . "$1"
+}
+source ~/fzf-git.sh/fzf-git.sh
+
+# --- Bat theme ---
+export BAT_THEME="Catppuccin Mocha"
+
+# ---- Zoxide ----
+eval "$(zoxide init zsh)"
