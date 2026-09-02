@@ -6,6 +6,8 @@ alias cl='clear'
 alias cc='clear && cd ~'
 alias q='exit'
 alias reload='source ~/.zshrc'
+alias update='sudo apt update'
+alias upgrade='sudo apt upgrade -y'
 
 # Nvim
 alias vim="nvim"
