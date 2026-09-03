@@ -215,3 +215,8 @@ export BAT_THEME="Catppuccin Mocha"
 
 # ---- Zoxide ----
 eval "$(zoxide init zsh)"
+
+# ---- List files/dirs when cd-ing to them ----
+chpwd() {
+  ls -A
+}

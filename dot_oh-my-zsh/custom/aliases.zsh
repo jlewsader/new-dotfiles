@@ -3,16 +3,13 @@ alias zshconfig="nvim ~/.zshrc"
 alias ohmyzsh="nvim ~/.oh-my-zsh"
 alias aliases="nvim ~/.oh-my-zsh/custom/aliases.zsh"
 alias cd='z' #Zoxide cd overide
+alias grep='rg' #ripgrep overide
+alias find='fd' #fd find overide
+alias cat='batcat' #bat cat override
 alias cl='clear'
-alias cc='clear && cd ~'
+alias cc='cd ~ && clear'
 alias q='exit'
 alias reload='source ~/.zshrc'
-alias update='sudo apt update'
-alias upgrade='sudo apt upgrade -y'
-alias install='sudo apt install'
-
-# Bat instead of Cat
-alias cat='batcat'
 
 # Nvim
 alias vim="nvim"
@@ -21,8 +18,8 @@ alias v="nvim"
 alias vdiff='nvim -d'
 
 # ColorLS
-alias ls='colorls -1'
-alias la='colorls --almost-all -1'
+alias ls='colorls'
+alias la='colorls --almost-all'
 alias lt='colorls -A --tree=2'
 alias lgs='colorls -A --gs'
 
@@ -74,12 +71,13 @@ alias dcu='docker compose up'
 alias dcd='docker compose down'
 alias dl='docker logs --tail=100'
 
-# Aliases: systemd
+# System
 alias sd='sudo systemctl'
 alias sdu='systemctl --user'
 alias jd='journalctl --no-pager'
-
-# Power (important for iPad-powered Pi)
-alias off='sudo poweroff'
+alias off='sudo poweroff' # important for iPad-powered Pi
 alias touchpad-off="gsettings set org.gnome.desktop.peripherals.touchpad send-events 'disabled' && echo 'Touchpad: OFF'"
 alias touchpad-on="gsettings set org.gnome.desktop.peripherals.touchpad send-events 'enabled' && echo 'Touchpad: ON'"
+alias update='sudo apt update'
+alias upgrade='sudo apt upgrade -y'
+alias install='sudo apt install'
