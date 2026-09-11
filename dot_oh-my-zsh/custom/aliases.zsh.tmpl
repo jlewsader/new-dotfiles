@@ -5,7 +5,11 @@ alias aliases="nvim ~/.oh-my-zsh/custom/aliases.zsh"
 alias cd='z' #Zoxide cd overide
 alias grep='rg' #ripgrep overide
 alias find='fd' #fd find overide
-alias cat='batcat' #bat cat override
+{{ if eq .chezmoi.osRelease.id "debian"}}
+alias cat='batcat'
+{{ else }}
+alias cat='bat'
+{{ end }}
 alias cl='clear'
 alias cc='cd ~ && clear'
 alias q='exit'
@@ -65,7 +69,7 @@ alias tk='tmux kill-session -t'
 
 # Docker
 alias d='docker'
-alias dps='docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"'
+alias dps='docker ps --format "table {{"{{.Names}}"}} \t {{"{{.Status}}"}} \t {{"{{.Ports}}"}}"'
 alias dc='docker compose'
 alias dcu='docker compose up'
 alias dcd='docker compose down'
