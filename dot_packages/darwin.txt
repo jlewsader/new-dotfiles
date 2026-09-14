@@ -1,0 +1,14 @@
+zsh
+tmux
+neovim
+fzf
+fd
+ripgrep
+zoxide
+bat
+fastfetch
+yazi
+lazygit
+ruby
+kitty
+firefox

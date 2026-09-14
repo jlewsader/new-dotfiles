@@ -1,0 +1,22 @@
+[user]
+    name = "Justin Lewsader"
+    email = "jlewsader@gmail.com"
+
+[core]
+    editor = nvim
+    pager = cat
+
+[init]
+    defaultBranch = main
+
+[pull]
+    rebase = true
+
+# OS-specific credential helpers
+{{ if eq .chezmoi.os "darwin" -}}
+[credential]
+    helper = osxkeychain
+{{ else -}}
+[credential]
+    helper = store
+{{ end -}}

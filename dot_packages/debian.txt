@@ -1,0 +1,12 @@
+zsh
+tmux
+neovim
+fzf
+fd-find
+ripgrep
+zoxide
+batcat
+fastfetch
+ruby
+ruby-dev
+build-essential

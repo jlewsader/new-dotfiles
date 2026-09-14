@@ -1,0 +1,14 @@
+# Global Defaults
+Host *
+    AddKeysToAgent yes
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+{{ if eq .chezmoi.os "darwin" -}}
+    UseKeychain yes
+{{ end -}}
+
+# Raspberry Pi / Local Servers
+Host pi
+    HostName pi.local
+    User pi
+    IdentityFile ~/.ssh/id_rsa

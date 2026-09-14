@@ -1,0 +1,14 @@
+zsh
+tmux
+neovim
+fzf
+fd-find
+ripgrep
+zoxide
+bat
+fastfetch
+ruby
+ruby-devel
+redhat-lsb-core
+gcc
+make
