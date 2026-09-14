@@ -3,20 +3,27 @@ set -euo pipefail
 
 echo "==> Starting package & tool installation..."
 
-{{ if eq .chezmoi.osRelease.id "fedora" -}}
+{{ $osId := "" -}}
+{{ if hasKey .chezmoi "osRelease" -}}
+  {{ $osId = .chezmoi.osRelease.id -}}
+{{ end -}}
+
+{{ if or (eq $osId "debian") (eq $osId "ubuntu") (eq $osId "pop") (eq $osId "raspbian") -}}
+# Hash trigger: {{ include "dot_packages/debian.txt" | sha256sum }}
+echo "==> Installing Debian/Ubuntu APT packages..."
+sudo apt update
+sudo apt install -y {{ include "dot_packages/debian.txt" | replace "\n" " " }}
+
+{{ else if or (eq $osId "fedora") (eq $osId "rhel") (eq $osId "centos") -}}
 # Hash trigger: {{ include "dot_packages/fedora.txt" | sha256sum }}
+echo "==> Installing Fedora DNF packages..."
 sudo dnf install -y {{ include "dot_packages/fedora.txt" | replace "\n" " " }}
 
-{{ else if eq .chezmoi.osRelease.id "debian" -}}
-# Hash trigger: {{ include "dot_packages/debian.txt" | sha256sum }}
-sudo apt update && sudo apt install -y {{ include "dot_packages/debian.txt" | replace "\n" " " }}
-
-{{ else if eq .chezmoi.osRelease.id "arch" -}}
+{{ else if or (eq $osId "arch") (eq $osId "manjaro") -}}
 # Hash trigger: {{ include "dot_packages/arch.txt" | sha256sum }}
-echo "Updating Arch packages..."
+echo "==> Installing Arch Pacman packages..."
 sudo pacman -Syu --needed --noconfirm {{ include "dot_packages/arch.txt" | replace "\n" " " }}
 
-# Setup yay for AUR packages if missing
 if ! command -v yay &>/dev/null; then
   echo "==> Installing yay (AUR Helper)..."
   sudo pacman -S --needed --noconfirm base-devel git
@@ -27,13 +34,14 @@ fi
 
 {{ else if eq .chezmoi.os "darwin" -}}
 # Hash trigger: {{ include "dot_packages/darwin.txt" | sha256sum }}
-echo "Updating macOS Homebrew packages..."
-# Ensure Homebrew is installed
+echo "==> Installing macOS Homebrew packages..."
 if ! command -v brew &>/dev/null; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 brew install {{ include "dot_packages/darwin.txt" | replace "\n" " " }}
 
+{{ else -}}
+echo "WARNING: Unknown OS ($osId). Skipping native package installation."
 {{ end -}}
 
 # ------------------------------------------------------------------------------
@@ -43,18 +51,23 @@ if [ ! -d "$HOME/.oh-my-zsh" ]; then
   echo "==> Installing Oh My Zsh..."
   KEEP_ZSHRC=yes RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
+
 ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+
+# Powerlevel10k
 P10K_DIR="$ZSH_CUSTOM/themes/powerlevel10k"
 if [ ! -d "$P10K_DIR" ]; then
   echo "==> Installing Powerlevel10k theme..."
   git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$P10K_DIR"
 fi
+
 # zsh-autosuggestions
 AUTOSUGGESTIONS_DIR="$ZSH_CUSTOM/plugins/zsh-autosuggestions"
 if [ ! -d "$AUTOSUGGESTIONS_DIR" ]; then
   echo "==> Installing zsh-autosuggestions..."
   git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions "$AUTOSUGGESTIONS_DIR"
 fi
+
 # zsh-syntax-highlighting
 SYNTAX_HIGHLIGHTING_DIR="$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
 if [ ! -d "$SYNTAX_HIGHLIGHTING_DIR" ]; then
@@ -68,7 +81,6 @@ fi
 if command -v gem &>/dev/null; then
   if ! gem list -i colorls &>/dev/null; then
     echo "==> Installing colorls gem..."
-    # Install to user home directory to avoid needing root/sudo for gems
     gem install colorls --user-install
   fi
 fi
@@ -87,16 +99,13 @@ fi
 if command -v zsh &>/dev/null; then
   ZSH_PATH="$(command -v zsh)"
 
-  # Ensure Zsh is listed in /etc/shells (required by chsh)
   if ! grep -q "$ZSH_PATH" /etc/shells; then
     echo "==> Adding $ZSH_PATH to /etc/shells..."
     echo "$ZSH_PATH" | sudo tee -a /etc/shells >/dev/null
   fi
 
-  # Change default shell if it isn't already Zsh
   if [ "$SHELL" != "$ZSH_PATH" ]; then
     echo "==> Changing default shell to Zsh ($ZSH_PATH)..."
-    # Use chsh non-interactively for the current user ($USER)
     sudo chsh -s "$ZSH_PATH" "$USER"
   fi
 fi
@@ -112,7 +121,6 @@ if [ ! -d "$FONT_DIR/JetBrainsMono" ]; then
   unzip -o /tmp/JetBrainsMono.zip -d "$FONT_DIR/JetBrainsMono/"
   rm /tmp/JetBrainsMono.zip
 
-  # Refresh font cache on Linux
   if command -v fc-cache &>/dev/null; then
     fc-cache -fv
   fi
