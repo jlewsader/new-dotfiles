@@ -1,22 +1,42 @@
 {
   "layer": "top",
   "modules-left": ["hyprland/workspaces"],
-  "modules-center": ["custom/myclock"],
+  "modules-center": ["hyprland/window"],
   "modules-right": [
     "hyprland/submap",
-    "group/volume",
-    "battery",
+    "custom/kdeconnect",
     "bluetooth",
     "network",
+    "battery",
+    "pulseaudio",
     "cpu",
-    "memory"
+    "memory",
+    "clock"
   ],
-  "hyprland/window": {
-    "max-length": 50
-  },
+"hyprland/workspaces": {
+    "format": "{name}",
+    "on-click": "activate",
+    "all-outputs": true,
+    "sort-by-number": true,
+    "enable-bar-scroll": true,
+    "scroll-speed": 1
+},
+
+"hyprland/window": {
+    "format": "{class}",
+    "separate-outputs": true,
+    "rewrite": {
+        "firefox": "Firefox ",
+        "kitty": "Terminal  ",
+        "yazi": "Files ",
+        "org.gnome.Nautilus": "Files ",
+        "spotify": "Spotify  ",
+        "^$": "Arch Linux "
+    }
+},
   "battery": {
     "interval": 60,
-    "format": "{capacity}% {icon}",
+    "format": "{icon} {capacity}%",
     "format-icons": {
       "default": [
         "󰂎",
@@ -57,13 +77,13 @@
   },
   "cpu": {
     "interval": 10,
-    "format": " {}%",
+    "format": "  {}%",
     "max-length": 10,
     "on-click": "exec kitty --title=btop -e btop"
   },
   "memory": {
     "interval": 30,
-    "format": " {percentage}%",
+    "format": "   {percentage}%",
     "tooltip-format": "{used:0.1f}G/{total:0.1f}G used",
     "on-click": "exec kitty --title=htop -e htop"
   },
@@ -71,7 +91,7 @@
     "format": "",
     "format-wifi": "",
     "format-ethernet": "",
-    "format-disconnected": "󰤭", //An empty format will hide the module.
+    "format-disconnected": "󰤭",
     "tooltip-format": "{ifname} via {gwaddr} 󰊗",
     "tooltip-format-wifi": "{essid} ({signalStrength}%) ",
     "tooltip-format-ethernet": "{ifname} ",
@@ -79,13 +99,31 @@
     "max-length": 50,
     "on-click": "exec kitty --title=nmtui -e nmtui"
   },
-  "custom/myclock": {
-    "exec": "date +'%a %b %d %-I:%M %p'",
-    "interval": 1,
-    "format": "{}"
+  "clock": {
+    "tooltip": true,
+    "format": "{:%I:%M %p}",
+    "tooltip-format": "{:%m-%d-%Y}",
   },
-  "group/volume": {
-    "orientation": "horizontal",
-    "modules": ["pulseaudio", "pulseaudio/slider"]
+  "pulseaudio": {
+      "format": "{icon} {volume}%",
+      "format-muted": "󰝟 {volume}%",
+      "format-icons": {
+          "headphone": "󰋋",
+          "hands-free": "󰋋",
+          "headset": "󰋋",
+          "phone": "󰏲",
+          "portable": "󰏲",
+          "car": "󰄋",
+          "default": ["󰕿", "󰖀", "󰕾"]
+      },
+      "scroll-step": 2,
+      "on-click": "pavucontrol",
+      "reverse-scrolling": true
   },
+  "custom/kdeconnect": {
+      "exec": "~/.config/waybar/kdeconnect.sh",
+      "return-type": "json",
+      "interval": 10,
+      "on-click": "kdeconnect-app"
+  }
 }

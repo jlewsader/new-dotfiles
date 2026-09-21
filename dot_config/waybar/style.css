@@ -1,90 +1,91 @@
 @import "mocha.css";
 
 * {
-  /* `otf-font-awesome` is required to be installed for icons */
-  font-family: "SF Pro, Regular";
-  font-size: 14px;
+  font-family: "SF Pro Text", "JetBrainsMono Nerd Font";
+  font-size: 13px;
+  font-weight: 400;
+  box-shadow: none;
+  text-shadow: none;
 }
 
 window#waybar {
-  background-color: @base;
+  background-color: rgba(24, 24, 37, 0.6);
   color: @text;
-}
-
-#workspaces button {
-  padding: 3px;
-  margin: 7px 0px 7px 7px;
-  background: transparent;
-  border-radius: 2px;
-  color: @text;
+  border: none;
 }
 
 #workspaces button.active {
   background: @green;
-  color: black;
+  color: #11111b;
   font-weight: 700;
 }
 
-#submap,
-#battery, 
-#bluetooth,
-#network,
-#cpu,
-#memory
- {
-  border-radius: 8px;
-  padding: 5px 8px;
-  /* background: @dark-8; */
-  margin: 5px;
-  font-family: "JetBrainsMono Nerd Font";
+#workspaces button {
+  font-family: "SF Pro Display", "JetBrainsMono Nerd Font";
+  font-weight: 600;
+  margin: 7px 2px;
+  background: transparent;
+  border-radius: 4px;
+  color: @text;
+  border: none;
+  padding: 0px;
 }
 
-#custom-myclock {
-  font-size: 18px;
-  padding: 0px;
+#workspaces button label {
+  font-family: "SF Pro Display", "JetBrainsMono Nerd Font";
+  font-weight: 600;
+  padding: 2px 8px;
+}
+
+#workspaces button.active label {
+  font-weight: 700;
+  color: #11111b;
 }
 
 #submap,
 #workspaces button.urgent {
   background: @red;
-  color: black;
+  color: #11111b;
 }
 
-#pulseaudio-slider {
-  padding: 0px;
-  margin: 0px;
-  margin-left: 8px;
+#submap,
+#battery, 
+#bluetooth,
+#custom-kdeconnect,
+#pulseaudio,
+#network,
+#cpu,
+#memory {
+  background-color: rgba(49, 50, 68, 0.4);
+  border-radius: 8px;
+  padding: 2px 8px;
+  margin: 5px 3px;
+  font-family: "SF Pro Display", "JetBrainsMono Nerd Font";
+  font-weight: 600;
 }
 
-#pulseaudio-slider slider {
-  all: unset;
-  min-height: 0;
-  min-width: 0;
-  opacity: 0;
-  background-image: none;
-  border: none;
-  box-shadow: none;
-  font-family: "SF Pro, Regular";
+#window,
+#window label {
+  font-size: 14px;
+  font-family: "SF Pro Rounded", "JetBrainsMono Nerd Font";
+  font-weight: 700;
 }
 
-#pulseaudio-slider trough {
-  min-height: 8px;
-  min-width: 75px;
-  border-radius: 5px;
-  background: @surface1;
-}
-
-#pulseaudio-slider highlight {
-  min-width: 10px;
-  border-radius: 5px;
-  background: @green;
+#clock {
+  font-family: "SF Pro Rounded", "JetBrainsMono Nerd Font";
+  font-weight: 700;
+  font-size: 14px;
+  padding: 2px 8px;
 }
 
 tooltip {
   background: @surface0;
-  border-radius: 5px;
+  border: 1px solid @surface1;
+  border-radius: 6px;
 }
 
 tooltip label {
+  font-family: "SF Pro Text", "JetBrainsMono Nerd Font";
   color: @text;
+  padding: 4px;
 }

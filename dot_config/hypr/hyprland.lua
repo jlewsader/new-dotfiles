@@ -35,6 +35,8 @@ local terminal = "kitty"
 local fileManager = terminal .. " -e yazi"
 local launcher = "wofi --show drun"
 local runner = "wofi --show run"
+local calc = "~/.local/bin/wofi-calc.sh"
+local ai = "~/.local/bin/wofi-ai.sh"
 local browser = "firefox"
 local editor = terminal .. " -e nvim"
 
@@ -52,6 +54,15 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("systemctl --user start hyprpolkitagent")
 	hl.exec_cmd("hyprpaper")
 	hl.exec_cmd("hypridle")
+	hl.exec_cmd("kdeconnectd")
+	hl.exec_cmd("mako")
+	-- Fix environment tokens for systemd/DBus services
+	hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
+	-- Persist clipboard and sync with cliphist daemon
+	hl.exec_cmd("wl-paste --type text --watch cliphist store &")
+	hl.exec_cmd("wl-paste --type image --watch cliphist store &")
+	hl.exec_cmd("wl-clip-persist --clipboard regular")
+	hl.exec_cmd("~/.local/bin/kde-watcher.sh &")
 end)
 
 -------------------------------
@@ -106,7 +117,7 @@ hl.config({
 		-- Please see https://wiki.hypr.land/Configuring/Advanced-and-Cool/Tearing/ before you turn this on
 		allow_tearing = false,
 
-		layout = "master",
+		layout = "scrolling",
 	},
 
 	decoration = {
@@ -115,13 +126,13 @@ hl.config({
 
 		-- Change transparency of focused and unfocused windows
 		active_opacity = 1.0,
-		inactive_opacity = 1.0,
+		inactive_opacity = 0.80,
 
 		shadow = {
 			enabled = true,
 			range = 4,
 			render_power = 3,
-			color = 0xee1a1a1a,
+			color = 0x99181825,
 		},
 
 		blur = {
@@ -279,8 +290,9 @@ hl.device({
 local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 local secondMod = "SUPER + SHIFT"
 
--- Toggle touchpad script --
-hl.bind(secondMod .. " + M", hl.dsp.exec_cmd("sh -c /home/justin/.config/hypr/scripts/toggle-touchpad.sh"))
+-- Cliphist and Tesseract clipboard Wofi
+hl.bind(mainMod .. " + V", hl.dsp.exec_cmd("cliphist list | wofi --dmenu | cliphist decode | wl-copy"))
+hl.bind(secondMod .. " + O", hl.dsp.exec_cmd('grim -g "$(slurp)" - | tesseract - - | wl-copy'))
 
 -- Close window --
 hl.bind(mainMod .. " + Q", hl.dsp.window.close())
@@ -290,10 +302,8 @@ hl.bind(
 	secondMod .. " + Escape",
 	hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'")
 )
-
 -- Lockscreen
 hl.bind(mainMod .. " + Escape", hl.dsp.exec_cmd("loginctl lock-session"))
-
 -- Suspend
 hl.bind(secondMod .. " + Delete", hl.dsp.exec_cmd("systemctl suspend"))
 
@@ -301,15 +311,16 @@ hl.bind(secondMod .. " + Delete", hl.dsp.exec_cmd("systemctl suspend"))
 hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser))
 hl.bind(mainMod .. " + F", hl.dsp.exec_cmd(fileManager))
-hl.bind(mainMod .. " + V", hl.dsp.exec_cmd(editor))
 
 hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd(launcher))
 hl.bind(secondMod .. " + Space", hl.dsp.exec_cmd(runner))
+hl.bind(secondMod .. " + C", hl.dsp.exec_cmd(calc))
+hl.bind(secondMod .. " + A", hl.dsp.exec_cmd(ai))
 
 -- Window toggles
--- hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit")) -- dwindle only
 hl.bind(secondMod .. " + T", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(secondMod .. " + F", hl.dsp.window.fullscreen({ mode = "maximized" }))
+hl.bind(mainMod .. " + F11", hl.dsp.window.fullscreen({ mode = "fullscreen" }))
 hl.bind(secondMod .. " + P", hl.dsp.window.pseudo())
 
 -- Move focus with mainMod + arrow keys
@@ -333,6 +344,20 @@ hl.bind(secondMod .. " + L", hl.dsp.window.move({ direction = "right" }))
 hl.bind(secondMod .. " + K", hl.dsp.window.move({ direction = "up" }))
 hl.bind(secondMod .. " + J", hl.dsp.window.move({ direction = "down" }))
 
+-- Resize Submap
+hl.bind(mainMod .. " + R", hl.dsp.submap("resize"))
+hl.define_submap("resize", function()
+	hl.bind("right", hl.dsp.window.resize({ x = 10, y = 0, relative = true }), { repeating = true })
+	hl.bind("left", hl.dsp.window.resize({ x = -10, y = 0, relative = true }), { repeating = true })
+	hl.bind("up", hl.dsp.window.resize({ x = 0, y = 10, relative = true }), { repeating = true })
+	hl.bind("down", hl.dsp.window.resize({ x = 0, y = -10, relative = true }), { repeating = true })
+	hl.bind("L", hl.dsp.window.resize({ x = 10, y = 0, relative = true }), { repeating = true })
+	hl.bind("H", hl.dsp.window.resize({ x = -10, y = 0, relative = true }), { repeating = true })
+	hl.bind("K", hl.dsp.window.resize({ x = 0, y = 10, relative = true }), { repeating = true })
+	hl.bind("J", hl.dsp.window.resize({ x = 0, y = -10, relative = true }), { repeating = true })
+	hl.bind("escape", hl.dsp.submap("reset"))
+end)
+
 -- Switch workspaces with mainMod + [0-9]
 -- Move active window to a workspace with mainMod + SHIFT + [0-9]
 for i = 1, 10 do
@@ -352,6 +377,27 @@ hl.bind(mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
 -- Move/resize windows with mainMod + LMB/RMB and dragging
 hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
+
+-- Toggle layouts
+-- Keep track of the layout index (1: dwindle, 2: master, 3: scrolling)
+local layouts = { "dwindle", "master", "scrolling" }
+local current_layout_idx = 1
+
+hl.bind(mainMod .. " + Backslash", function()
+	current_layout_idx = (current_layout_idx % #layouts) + 1
+	local next_layout = layouts[current_layout_idx]
+
+	-- Apply the layout keyword
+	hl.config({ general = { layout = next_layout } })
+
+	-- Optional: Send a notification
+	hl.exec_cmd(string.format('notify-send "Hyprland Layout" "Switched to %s"', next_layout))
+end)
+
+-- Print screen Screenshots
+hl.bind("print", hl.dsp.exec_cmd("grim ~/Pictures/Screenshots/screenshot_$(date +'%Y-%m-%d_%H-%M-%S').png"))
+hl.bind(mainMod .. " + print", hl.dsp.exec_cmd('grim -g "$(slurp)" - | wl-copy'))
+hl.bind(secondMod .. " + print", hl.dsp.exec_cmd('grim -g "$(slurp)" - | swappy -f -'))
 
 -- Laptop multimedia keys for volume and LCD brightness
 hl.bind(
@@ -384,16 +430,17 @@ hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = tru
 hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true })
 
 -- Power button bind to guarantee suspend
--- hl.bind("XF86PowerOff", hl.dsp.exec_cmd("systemctl suspend"))
+hl.bind("XF86PowerOff", hl.dsp.exec_cmd("systemctl suspend"))
 
+hl.bind("switch:Lid Switch", hl.dsp.exec_cmd("hyprlock"), { locked = true })
 -- Lid Closed: disable internal screen
-hl.bind("switch:on:Lid Switch", function()
-	hl.monitor({ output = "eDP-1", disabled = true })
-end, { locked = true })
+-- hl.bind("switch:on:Lid Switch", function()
+-- 	hl.monitor({ output = "eDP-1", disabled = true })
+-- end, { locked = true })
 -- Lid Opened: re-enable internal screen
-hl.bind("switch:off:Lid Switch", function()
-	hl.monitor({ output = "eDP-1", disabled = false })
-end, { locked = true })
+-- hl.bind("switch:off:Lid Switch", function()
+-- 	hl.monitor({ output = "eDP-1", disabled = false })
+-- end, { locked = true })
 
 --------------------------------
 ---- WINDOWS AND WORKSPACES ----

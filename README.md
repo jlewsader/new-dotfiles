@@ -11,3 +11,5 @@ chezmoi init --apply https://github.com/jlewsader/new-dotfiles.git
 ```bash
 sh -c "$(curl -fsLS https://get.chezmoi.io)" -- init --apply https://github.com/jlewsader/new-dotfiles
 ```
+
+### WIP: I am currently working on a new Arch install and backup.
