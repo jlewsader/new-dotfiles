@@ -89,3 +89,24 @@ tooltip label {
   color: @text;
   padding: 4px;
 }
+
+#battery {
+    color: @text;
+    background-color: transparent;
+}
+
+/* Yellow color when battery drops to 30% or below */
+#battery.warning {
+    color: @yellow;
+}
+
+/* Red color when battery drops to 15% or below */
+#battery.critical {
+    color: @red;
+}
+
+/* Keep regular colors while charging so it doesn't look critical */
+#battery.charging {
+    color: @green;
+}
+

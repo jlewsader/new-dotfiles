@@ -36,6 +36,10 @@
 },
   "battery": {
     "interval": 60,
+    "states": {
+        "warning": 30,
+        "critical": 15
+    },
     "format": "{icon} {capacity}%",
     "format-icons": {
       "default": [
@@ -102,7 +106,7 @@
   "clock": {
     "tooltip": true,
     "format": "{:%I:%M %p}",
-    "tooltip-format": "{:%m-%d-%Y}",
+    "tooltip-format": "{:%D}",
   },
   "pulseaudio": {
       "format": "{icon} {volume}%",
