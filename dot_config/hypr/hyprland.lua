@@ -303,7 +303,7 @@ hl.bind(
 	hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'")
 )
 -- Lockscreen
-hl.bind(mainMod .. " + Escape", hl.dsp.exec_cmd("loginctl lock-session"))
+hl.bind(mainMod .. " + Escape", hl.dsp.exec_cmd("hyprlock"))
 -- Suspend
 hl.bind("CTRL + ALT + Delete", hl.dsp.exec_cmd("systemctl suspend"))
 
