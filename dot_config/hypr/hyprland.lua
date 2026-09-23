@@ -305,7 +305,7 @@ hl.bind(
 -- Lockscreen
 hl.bind(mainMod .. " + Escape", hl.dsp.exec_cmd("loginctl lock-session"))
 -- Suspend
-hl.bind(secondMod .. " + Delete", hl.dsp.exec_cmd("systemctl suspend"))
+hl.bind("CTRL + ALT + Delete", hl.dsp.exec_cmd("systemctl suspend"))
 
 -- Launcher shortcuts --
 hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
