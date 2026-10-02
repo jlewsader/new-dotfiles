@@ -52,6 +52,7 @@ local editor = terminal .. " -e nvim"
 hl.on("hyprland.start", function()
 	hl.exec_cmd("waybar")
 	hl.exec_cmd("systemctl --user start hyprpolkitagent")
+	hl.exec_cmd("hyprctl setcursor Bibata-Modern-Ice 20")
 	hl.exec_cmd("hyprpaper")
 	hl.exec_cmd("hypridle")
 	hl.exec_cmd("kdeconnectd")
@@ -63,6 +64,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("wl-paste --type image --watch cliphist store &")
 	hl.exec_cmd("wl-clip-persist --clipboard regular")
 	hl.exec_cmd("~/.local/bin/kde-watcher.sh &")
+	hl.exec_cmd("~/.local/bin/battery-notify.sh &")
 end)
 
 -------------------------------
@@ -293,6 +295,10 @@ local secondMod = "SUPER + SHIFT"
 -- Cliphist and Tesseract clipboard Wofi
 hl.bind(mainMod .. " + V", hl.dsp.exec_cmd("cliphist list | wofi --dmenu | cliphist decode | wl-copy"))
 hl.bind(secondMod .. " + O", hl.dsp.exec_cmd('grim -g "$(slurp)" - | tesseract - - | wl-copy'))
+
+-- Mako notification dismiss
+hl.bind(mainMod .. " + Delete", hl.dsp.exec_cmd("makoctl dismiss"))
+hl.bind(secondMod .. " + Delete", hl.dsp.exec_cmd("makoctl dismiss --all"))
 
 -- Close window --
 hl.bind(mainMod .. " + Q", hl.dsp.window.close())
