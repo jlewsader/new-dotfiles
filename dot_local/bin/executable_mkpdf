@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Check if a file was provided
+if [ -z "$1" ]; then
+    echo "Usage: mkpdf <path/to/file.md>"
+    exit 1
+fi
+
+INPUT="$1"
+
+# Verify the file exists
+if [ ! -f "$INPUT" ]; then
+    echo "Error: File '$INPUT' not found."
+    exit 1
+fi
+
+# Extract directory, base filename (without extension)
+DIR=$(dirname "$INPUT")
+BASENAME=$(basename "$INPUT" .md)
+OUTPUT="$DIR/$BASENAME.pdf"
+
+echo "Converting $INPUT to PDF..."
+pandoc "$INPUT" -o "$OUTPUT" --pdf-engine=xelatex
+
+if [ $? -eq 0 ]; then
+    echo "Successfully created: $OUTPUT"
+else
+    echo "Error: PDF compilation failed."
+fi
