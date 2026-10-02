@@ -1,7 +1,7 @@
 # General
-alias zshconfig="nvim ~/.zshrc"
-alias ohmyzsh="nvim ~/.oh-my-zsh"
-alias aliases="nvim ~/.oh-my-zsh/custom/aliases.zsh"
+alias zshconfig="chezmoi edit ~/.zshrc"
+alias ohmyzsh="chezmoi edit ~/.oh-my-zsh"
+alias aliases="chezmoi edit ~/.oh-my-zsh/custom/aliases.zsh"
 alias cd='z' #Zoxide cd overide
 alias grep='rg' #ripgrep overide
 alias find='fd' #fd find overide
@@ -80,8 +80,13 @@ alias sd='sudo systemctl'
 alias sdu='systemctl --user'
 alias jd='journalctl --no-pager'
 alias off='sudo poweroff' # important for iPad-powered Pi
-alias touchpad-off="gsettings set org.gnome.desktop.peripherals.touchpad send-events 'disabled' && echo 'Touchpad: OFF'"
-alias touchpad-on="gsettings set org.gnome.desktop.peripherals.touchpad send-events 'enabled' && echo 'Touchpad: ON'"
+
+{{ if eq .chezmoi.osRelease.id "debian" }}
 alias update='sudo apt update'
 alias upgrade='sudo apt upgrade -y'
 alias install='sudo apt install'
+{{ else if eq .chezmoi.osRelease.id "arch" }}
+alias update='yay -Sy'
+alias upgrade='yay -Syu'
+alias install='yay -S'
+{{ end }}
