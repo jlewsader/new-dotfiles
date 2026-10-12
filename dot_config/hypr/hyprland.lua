@@ -20,10 +20,17 @@
 
 -- See https://wiki.hypr.land/Configuring/Basics/Monitors/
 hl.monitor({
-	output = "",
+	output = "eDP-1",
 	mode = "preferred",
-	position = "auto",
+	position = "0x0",
 	scale = "auto",
+})
+
+hl.monitor({
+	output = "HDMI-A-1",
+	mode = "3840x2160@30",
+	position = "1280x0",
+	scale = "2",
 })
 
 ---------------------
