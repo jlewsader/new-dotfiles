@@ -7,8 +7,22 @@ Host *
     UseKeychain yes
 {{ end -}}
 
-# Raspberry Pi / Local Servers
+# Pi (WiFi)
 Host pi
-    HostName pi.local
-    User pi
-    IdentityFile ~/.ssh/id_rsa
+    HostName 192.168.1.254
+    User jlewsader
+    IdentityFile ~/.ssh/id_ed25519
+
+# Tailscale PVM
+Host tailscalepvm
+    HostName 192.168.1.6
+    User ubuntu
+    IdentityFile ~/.ssh/id_ed25519
+    SetEnv TERM=xterm-256color
+
+# Proxmox Server
+Host proxmox
+    HostName 192.168.1.5
+    User root
+    IdentityFile ~/.ssh/id_ed25519
+    SetEnv TERM=xterm-256color

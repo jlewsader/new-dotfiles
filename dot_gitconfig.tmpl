@@ -12,7 +12,11 @@
 [pull]
     rebase = true
 
-# OS-specific credential helpers
+[diff]
+	tool = nvimdiff
+[difftool]
+	prompt = false
+
 {{ if eq .chezmoi.os "darwin" -}}
 [credential]
     helper = osxkeychain
