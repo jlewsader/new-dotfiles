@@ -85,8 +85,10 @@ alias off='sudo poweroff' # important for iPad-powered Pi
 alias update='sudo apt update'
 alias upgrade='sudo apt upgrade -y'
 alias install='sudo apt install'
+alias uninstall='sudo apt purge package_name && sudo apt autoremove'
 {{ else if eq .chezmoi.osRelease.id "arch" }}
 alias update='yay -Sy'
 alias upgrade='yay -Syu'
 alias install='yay -S'
+alias uninstall='yay -Rns'
 {{ end }}
