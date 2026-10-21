@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# 1. Open Wofi in dmenu mode to capture your prompt
+PROMPT=$(wofi --dmenu --prompt "Ask AI:")
+
+# Exit if nothing was typed or user cancelled
+[ -z "$PROMPT" ] && exit 0
+
+# 2. Query the remote Ollama server (silently show a notification that it's thinking)
+notify-send "AI" "Thinking..." -t 2000
+
+RESPONSE=$(curl -s -X POST http://192.168.1.248:11434/api/generate -d "{
+  \"model\": \"qwen2.5:3b\",
+  \"prompt\": $(jq -Rs <<< "$PROMPT"),
+  \"stream\": false
+}" | jq -r '.response')
+
+# 3. Display the response in a notification and copy it to the clipboard
+notify-send "AI Response" "$RESPONSE"
+echo "$RESPONSE" | wl-copy

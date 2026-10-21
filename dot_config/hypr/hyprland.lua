@@ -43,7 +43,7 @@ local fileManager = terminal .. " -e yazi"
 local launcher = "wofi --show drun"
 local runner = "wofi --show run"
 local calc = "~/.local/bin/wofi-calc.sh"
-local ai = "~/.local/bin/wofi-ai.sh"
+local ai = "~/.local/bin/wofi-ai"
 local browser = "firefox"
 local editor = terminal .. " -e nvim"
 
