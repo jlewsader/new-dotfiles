@@ -1,6 +1,5 @@
 # Ignore a file based on a specific hostname
 {{ if eq .chezmoi.hostname "pi" }}
-.run_onchange_before_install-packages.sh.tmpl
 .config/hypr
 .config/kitty
 .config/mako
