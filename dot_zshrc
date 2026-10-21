@@ -224,3 +224,6 @@ chpwd() {
 
 # Added by Antigravity CLI installer
 export PATH="/home/jlewsader/.local/bin:$PATH"
+
+# Local Ollama server
+export OLLAMA_HOST=http://192.168.1.248:11434
