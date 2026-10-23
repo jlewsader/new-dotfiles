@@ -42,7 +42,7 @@ local terminal = "kitty"
 local fileManager = terminal .. " -e yazi"
 local launcher = "wofi --show drun"
 local runner = "wofi --show run"
-local calc = "~/.local/bin/wofi-calc.sh"
+local calc = "wofi-calc"
 local ai = "~/.local/bin/wofi-ai"
 local browser = "firefox"
 local editor = terminal .. " -e nvim"
@@ -328,7 +328,7 @@ hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(editor))
 
 hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd(launcher))
 hl.bind(secondMod .. " + Space", hl.dsp.exec_cmd(runner))
-hl.bind(secondMod .. " + C", hl.dsp.exec_cmd(calc))
+hl.bind(mainMod .. " + equal", hl.dsp.exec_cmd(calc))
 hl.bind(secondMod .. " + A", hl.dsp.exec_cmd(ai))
 
 -- Window toggles
