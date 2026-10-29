@@ -5,7 +5,7 @@ fzf
 fd-find
 ripgrep
 zoxide
-batcat
+bat
 fastfetch
 ruby
 ruby-dev
