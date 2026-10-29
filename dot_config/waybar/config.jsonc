@@ -1,5 +1,6 @@
 {
   "layer": "top",
+  "fixed-center": true,
   "modules-left": ["hyprland/workspaces"],
   "modules-center": ["hyprland/window"],
   "modules-right": [
@@ -22,18 +23,24 @@
     "scroll-speed": 1
 },
 
+// "hyprland/window": {
+//     "format": "{class}",
+//     "separate-outputs": true,
+//     "rewrite": {
+//         "firefox": "Firefox ",
+//         "kitty": "Terminal  ",
+//         "yazi": "Files ",
+//         "org.gnome.Nautilus": "Files ",
+//         "spotify": "Spotify  ",
+//         "^$": "Arch Linux "
+//     }
+// },
 "hyprland/window": {
-    "format": "{class}",
-    "separate-outputs": true,
-    "rewrite": {
-        "firefox": "Firefox ",
-        "kitty": "Terminal  ",
-        "yazi": "Files ",
-        "org.gnome.Nautilus": "Files ",
-        "spotify": "Spotify  ",
-        "^$": "Arch Linux "
-    }
+    "format": "{class} — {title}",
+    "max-length": 30,
+    "separate-outputs": true
 },
+
   "battery": {
     "interval": 60,
     "states": {
