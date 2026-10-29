@@ -12,7 +12,17 @@ echo "==> Starting package & tool installation..."
 # Hash trigger: {{ include "dot_packages/debian.txt" | sha256sum }}
 echo "==> Installing Debian/Ubuntu APT packages..."
 sudo apt update
-sudo apt install -y {{ include "dot_packages/debian.txt" | replace "\n" " " }}
+
+# Map 'bat' to 'batcat' for Debian/Ubuntu repositories
+RAW_PKGS="{{ include "dot_packages/debian.txt" | replace "\n" " " }}"
+DEBIAN_PKGS=$(echo "$RAW_PKGS" | sed 's/\bbat\b/batcat/g')
+
+sudo apt install -y $DEBIAN_PKGS
+
+# Ensure 'bat' command maps to 'batcat' if installed via apt
+if command -v batcat &>/dev/null && ! command -v bat &>/dev/null; then
+  sudo ln -s /usr/bin/batcat /usr/local/bin/bat
+fi
 
 {{ else if or (eq $osId "fedora") (eq $osId "rhel") (eq $osId "centos") -}}
 # Hash trigger: {{ include "dot_packages/fedora.txt" | sha256sum }}
